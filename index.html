@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Appointments</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+    
+  </script>
+  <link rel="stylesheet" href="appointment/assets/vendor/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="appointment/assets/vendor/css/jquery.timepicker.min.css">
+  <style>
+    body {
+    background-color: #333333;
+    color: #fff;
+    }
+
+    #content {
+    margin: 0 auto;
+    text-align: center;
+    padding:2px;
+    }
+
+    #form {
+    display: none;
+    text-align: left;
+    }
+
+    #formField{
+    display: block;
+    line-height:18px;    
+    }
+    
+    input{    
+    width:200px;
+    height: 20px;
+    margin: 3px;
+    padding: 3px;
+    }
+
+    .button{
+    height: 30px;
+    width: 70px;
+    font-weight: bold;
+    }
+    
+    label {
+    margin: 2px 3px 3px 1px;
+    display: block;    
+    }
+    
+    textarea{
+    width:200px;
+    height: 50px;
+    padding: 3px;
+    margin: 3px;
+    }
+
+    .input_error{
+    border: 1px solid #f00; 
+    }
+  </style>
+  
+</head>
+<body>
+  <div id="content">
+    <button class="button" id="new">New</button>
+    <div id="form">
+      <button class="button" id="add">Add</button>
+      <button class="button" id="cancel">Cancel</button>
+      <form id="appointment" method="post">
+	<div id="formField">
+	  <label for="appointment_date">Date:</label>
+	  <input type="text" id="appointment_date" />
+	</div>
+	<div id="formField">
+	  <label for="appointment_time">Time:</label>
+	  <input type="text" id="appointment_time" />
+	</div>
+	<div id="formField">
+	  <label for="description">Description</label>
+	  <textarea type="textarea" id="description" col="26" row="5"></textarea>
+	</div>	
+      </form>
+    </div>
+    <div id="search">
+      <input type="text"  id="query" /><button class="button" id="search">Search</button>
+    </div>
+
+    <div id="appointments">
+      
+    </div>
+    
+  </div>
+  <script src="appointment/assets/vendor/js/jquery-3.3.1.min.js"></script>
+  <script src="appointment/assets/vendor/js/jquery-ui.min.js"></script>
+  <!-- date picker credits: http://jonthornton.github.io/jquery-timepicker/-->
+  <script src="appointment/assets/vendor/js/jquery.timepicker.min.js"></script>
+  <script src="appointment/assets/js/main.js"></script>
+</body>
+</html>
