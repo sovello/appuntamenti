@@ -1,18 +1,22 @@
-#!/usr/bin/perl
-
+#!/usr/bin/perl -T
 use strict;
 use warnings;
-
 use JSON;
 use CGI;
 
-my $cgi = CGI->new();
+my $cgi = new CGI;
 
-print $cgi->header('application/json;charset=UTF-8');
+#my $query = $cgi->param('POSTDATA');
+#my $appointmentObj = decode_json $post;
 
-my $data = $param('appointment');
+my $date = $cgi->param('date');
+my $time = $cgi->param('time'); 
+my $desc = $cgi->param('description');
 
-my @appointmentObj = @{decode_json($data)}
-
-print $cgi->header('text/plain;charset=utf-8');
-print $appointmentObj.description."\n";
+# create a JSON string according to the database result
+my $result = (1) ? 
+qq{{"success" : "$desc", "time" : "$time"}} : 
+qq{{"error" : "did not get anything "}};
+# return JSON string
+print $cgi->header(-type=>"application/json", -charset=>"utf-8");
+print $result;
