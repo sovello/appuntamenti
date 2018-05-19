@@ -36,9 +36,8 @@ $(document).ready( function(){
 	    //processData: false,	    
 	    success: function(result){
 		$("div#form").hide();
-		$("div#message").text("saved something: "+result.success);
-		console.log(result.success);
-		console.log(result.time);
+		$("div#message").text("Record has been saved!");
+		echoAppointments(result.appointments);
 	    },
 	    error: function(result){
 		console.log(result.error);
@@ -55,5 +54,20 @@ $(document).ready( function(){
 	    field.removeClass("input_error");
 	}
 	return field.val();
+    };
+
+    function echoAppointments(data){	
+	//var appointments = JSON.parse(data);
+	if($.isEmptyObject(data)){
+	    $("div#appointments").text("You don't have appointments scheduled");
+	}
+	else{	    
+	    var trHTML = '';
+	    $.each(data, function (i, appointment) {
+		trHTML += '<tr><td>' + appointment.date + '</td><td>' + appointment.time + '</td><td>' + appointment.description + '</td></tr>';
+	    });
+	    $('#appointment_list').append(trHTML);
+	};
+	
     };
 });
