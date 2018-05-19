@@ -24,27 +24,24 @@ $(document).ready( function(){
 	//var appt_date = $("#appointment_date").val();
 	var appt_date = getInput($("#appointment_date"));
 	var appt_time = getInput($("#appointment_time"));
-	var description = getInput($("#description"));
-	var form = $("#appointment")[0];
-	
-	var data = new FormData();
-	data.append("date", appt_date);
-	data.append("time", appt_time);
-	data.append("description", description);
+	var description = getInput($("#description"));	
+	var appt = {"date": appt_date, "time": appt_time, "description":description}
 	$.ajax({
-	    type: "POST",
-	    url: "http://localhost/appointment/cgi-bin/appointment.pl",
+	    type: "GET",
+	    url: "http://localhost/cgi-bin/appointment/appointment.pl",
 	    contentType: "application/json; charset=utf-8",
+	    data:appt,
 	    dataType: "json",
-	    data: {'appointment': JSON.stringify(data)},
-	    processData: false,
 	    cache: false,
-	    success: function(data){
-		console.log("Success:", data);
+	    //processData: false,	    
+	    success: function(result){
+		$("div#form").hide();
+		$("div#message").text("saved something: "+result.success);
+		console.log(result.success);
+		console.log(result.time);
 	    },
-	    error: function(e){
-		console.log();
-		console.log("Error:", e);
+	    error: function(result){
+		console.log(result.error);
 	    }
 	});
 	
