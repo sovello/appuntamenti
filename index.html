@@ -25,7 +25,7 @@
     }
 
     #form {
-    display: none;
+    display: block;
     text-align: left;
     }
 
@@ -33,7 +33,14 @@
     display: block;
     line-height:18px;    
     }
-    
+
+    #cancel{
+    display:none;
+    }
+
+    #appointment{
+    display: none;
+    }
     input{    
     width:200px;
     height: 20px;
@@ -67,10 +74,10 @@
 </head>
 <body>
   <div id="content">
-    <button class="button" id="new">New</button>
     <div id="form">
-      <button class="button" id="add">Add</button>
-      <button class="button" id="cancel">Cancel</button>
+      <div id="message"></div>
+    <button class="button" id="new">NEW</button>    
+      <button class="button" id="cancel">CANCEL</button>
       <form id="appointment" method="post">
 	<div id="formField">
 	  <label for="appointment_date">Date:</label>
@@ -85,10 +92,9 @@
 	  <textarea type="textarea" id="description" col="26" row="5"></textarea>
 	</div>	
       </form>
-    </div>
-    <div id="message"></div>
-    <div id="search">
-      <input type="text"  id="query" /><button class="button" id="search">Search</button>
+    <!--</div>-->    
+    <div id="search_box">
+      <input type="text"  id="search_query" /><button class="button" id="search">Search</button>
     </div>
 
     <div id="appointments">

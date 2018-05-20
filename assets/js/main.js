@@ -1,67 +1,111 @@
-$(document).ready( function(){
-    // show the form to create a new appointment
-    $("#new").click(function(){
-	$(this).hide();
-	$("#form").show();
-    });
-
-    // remove form when cancel is clicked
-    $("#cancel").click(function(){
-	$("#form").hide();
-	$("#new").show();
-    });
-
-        // datepicker
-    $( function(){
-	$("#appointment_date").datepicker({minDate:0});
-    });
-
-    $('#appointment_time').timepicker({ 'scrollDefault': 'now' });
-
-    //data submission
-    $("#add").on("click", function(){
-
-	//var appt_date = $("#appointment_date").val();
-	var appt_date = getInput($("#appointment_date"));
-	var appt_time = getInput($("#appointment_time"));
-	var description = getInput($("#description"));	
-	var appt = {"date": appt_date, "time": appt_time, "description":description}
-	$.ajax({
-	    type: "GET",
-	    url: "http://localhost/cgi-bin/appointment/appointment.pl",
+var appointment = {
+    init: function(){
+	appointment.config = {
+	    urlBase: "http://localhost/cgi-bin/appointment/appointment.pl",
 	    contentType: "application/json; charset=utf-8",
-	    data:appt,
 	    dataType: "json",
+	};
+    },
+
+    //*************************************//
+    //===========FORM CONTROLS=============//
+    //*************************************//
+    
+    // show the form to create a new appointment
+    showForm: function(){
+	$(document).on("click","#new", function(){
+	    $(this)
+		.text("ADD")
+		.attr("id", "add");
+	    $("#cancel").show();
+	    $("form#appointment").show();
+	});
+    },
+
+    //clicking on the cancel button
+    cancel: function(){
+	// remove form when cancel is clicked
+	$(document).on("click", "#cancel", function(){
+	    $(this).hide();
+	    $("#add")
+		.text("NEW")
+		.attr("id", "new");
+	    $("form#appointment").hide();
+	});
+    },
+    
+    //clear the form
+    //used specifically after submission of new appointment
+    clearForm: function(){
+	$("#appointment_date").val("");
+	$("#appointment_time").val("");
+	$("#description").val("");
+    },
+
+    //clear a form field
+    cleafField: function(field_element){
+	$(field_element).val("");
+    },        
+
+    //show date or time picker depending on picker
+    showPicker: function(element, picker){
+	// datepicker
+	if( picker == "date"){
+	    $(element).datepicker({minDate:0});	    
+	}
+	else {
+	    $(element).timepicker({ 'scrollDefault': 'now' });
+	}
+    },
+
+    //**************************************//
+    //*******DATA SUBMISSIONS***************//
+    //**************************************//
+    
+    //validations
+    validateFormFields: function(field_elements){
+	var valid = true;
+	for(field in field_elements){
+	    if($(field_elements[field]).val().length == 0){
+		$(field_elements[field]).addClass("input_error");
+		valid = false;		
+	    }
+	    else{
+		$(field_elements[field]).removeClass("input_error");
+	    };
+	};		
+	return valid;
+    },
+    
+    
+    //ajax request
+    doAjax: function(method, request_data){
+	$.ajax({	    
+	    url: appointment.config.urlBase,
+	    method: method,	    
+	    data:request_data,
+	    dataType: appointment.config.dataType,
 	    cache: false,
-	    //processData: false,	    
 	    success: function(result){
-		$("div#form").hide();
-		$("div#message").text("Record has been saved!");
-		echoAppointments(result.appointments);
+		if( method != "GET" ){
+		    $("div#message").text("Record has been saved!");
+		    appointment.clearForm();
+		}
+		appointment.echoAppointments(result.appointments);
 	    },
 	    error: function(result){
 		console.log(result.error);
 	    }
 	});
-	
-    });
+    },
 
-    function getInput(field){
-	if(field.val().length == 0){	    
-	    field.addClass("input_error");	    
-	}
-	else{
-	    field.removeClass("input_error");
-	}
-	return field.val();
-    };
-
-    function echoAppointments(data){	
+    echoAppointments: function(data){	
 	//var appointments = JSON.parse(data);
 	if($.isEmptyObject(data)){
-	    $("div#appointments").text("You don't have appointments scheduled");
+	    $("div#message").text("We couldn't find a match");
 	}
-	else{	    
+	else{
+	    $('#appointment_list').empty();
 	    var trHTML = '';
 	    $.each(data, function (i, appointment) {
 		trHTML += '<tr><td>' + appointment.date + '</td><td>' + appointment.time + '</td><td>' + appointment.description + '</td></tr>';
@@ -69,5 +113,45 @@ $(document).ready( function(){
 	    $('#appointment_list').append(trHTML);
 	};
 	
-    };
+    },
+
+    getInput: function(field){	
+	return field.val();
+    },
+
+};
+
+$(document).ready( function(){
+    appointment.init();
+    appointment.showForm();
+    
+    appointment.cancel();
+    
+    appointment.showPicker("#appointment_date", "date");
+    appointment.showPicker("#appointment_time", "time");
+
+    //data submission
+    $(document).on("click", "#add", function(){
+	$("div#message").text("");
+	if( appointment.validateFormFields(["#appointment_date", "#appointment_time", "#description"])){
+	    var appt_date = appointment.getInput($("#appointment_date"));
+	    var appt_time = appointment.getInput($("#appointment_time"));
+	    var description = appointment.getInput($("#description"));
+	    
+	    var appt = {date: appt_date, time: appt_time, description:description}	
+	    appointment.doAjax("POST", appt);
+	}
+	else{
+	    console.log("we didn't submit anything");
+	}	
+    });
+
+    $(document).on("click", "#search", function(){
+	$("div#message").text("");
+	var query = appointment.getInput($("#search_query"));
+	if( query.trim().length != 0){
+	    appointment.doAjax("GET", {search_query: query, all:2});
+	}		    	
+    });
+    appointment.doAjax("GET", {all:1})
 });
