@@ -1,51 +1,65 @@
-#!/usr/bin/perl -T
+#!/usr/bin/perl
 use strict;
 use warnings;
 use JSON;
 use CGI;
-
 use DBI;
-    
+
+use FindBin;
+use lib "$FindBin::Bin/..";
+use DBConnection;
+use Appointment;
+
 my $cgi = new CGI;
 
-#my $query = $cgi->param('POSTDATA');
-#my $appointmentObj = decode_json $post;
-my $driver = "SQLite";
 my $db = "../db/appointment.db";
-my $dsn = "DBI:$driver:dbname=$db";
 my $userid = "";
 my $passwd = "";
-my $dbh = DBI->connect($dsn, $userid, $passwd, {PrintError=>1,RaiseError=>1}, ) or die $DBI::errstr;
+
+my $dbconn = DBConnection->new;
+my $appt = Appointment->new;
+
+my $dbh = $dbconn->connect($db, $userid, $passwd);
+
+if( $dbh == 0){
+    my $result = qq{{"error" : "We could not connect to the database at this time"}};
+# return JSON string
+    print $cgi->header(-type=>"application/json", -charset=>"utf-8");
+    print $result;
+}
+
 my $drop = $dbh->prepare("DROP TABLE IF EXISTS appointment");
 my $create = $dbh->prepare("CREATE TABLE IF NOT EXISTS appointment(id INTEGER PRIMARY KEY, time TEXT, date TEXT, description TEXT)");
 $create->execute();
 
-my $date = $cgi->param('date');
-my $time = $cgi->param('time'); 
-my $desc = $cgi->param('description');
-my $insert = $dbh->prepare("INSERT INTO appointment (`time`, `date`, `description`) VALUES (?, ?, ?)");
-$insert->execute($time, $date, $desc);
-
-my $select = $dbh->prepare("SELECT `id` AS id, `time` AS time, `date` AS date, `description` AS description FROM appointment");
-$select->execute();
+if($cgi->param("id")){
+    my $date = $cgi->param('date');
+    my $time = $cgi->param('time'); 
+    my $desc = $cgi->param('description');
+    $appt->insert($dbh, $date, $time, $desc);
+}
 
 my @results;
-#my $results = $select->fetchall_arrayref();
-while (my $row = $select->fetchrow_hashref) {
-    push @results, $row;
+
+if($cgi->param("search_query")){
+    my $desc = $cgi->param("search_query");
+    # load all people
+    @results = $appt->search($dbh, $desc, 2);    
+}
+else{    
+    # load all people
+    @results = $appt->search($dbh, undef, 1);
 }
 
 $dbh->disconnect();
-
-
 my $json->{"appointments"} = \@results;
 my $appointments = encode_json $json;
 
 
 # create a JSON string according to the database result
-my $result = (1) ? 
-qq{{"success" : "$desc", "time" : "$time"}} : 
-qq{{"error" : "did not get anything "}};
+#my $result = (1) ? 
+#qq{{"success" : "$desc", "time" : "$time"}} : 
+#qq{{"error" : "did not get anything "}};
 # return JSON string
 print $cgi->header(-type=>"application/json", -charset=>"utf-8");
 print $appointments;
