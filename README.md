@@ -13,6 +13,13 @@ cd /opt/
 git clone https://github.com/sovello/appuntamenti.git appointment
 cd appointment
 ```
+### Organization
+* `db/` holds the database
+* `web/` contains all web related files
+  * `/web/assets/vendor` has third party frameworks (jQuery, timepicker, etc)
+  * `web/assets/js` has mainly one .js file used for this site
+  * `web/assets/css` custom css
+* `cgi-bin` has all Perl scripts (Modules)
 
 ### Dependencies
 
