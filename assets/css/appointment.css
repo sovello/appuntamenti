@@ -1,0 +1,58 @@
+body {
+    background-color: #f7f4f2;
+    color: #826553;
+    font-family:sans-serif;
+    font-size:small;
+    }
+
+    #content {
+    margin: 0 auto;
+    text-align: center;
+    padding:2px;
+    }
+
+    #form {
+    display: block;
+    text-align: left;
+    }
+
+    #formField{
+    display: block;
+    line-height:18px;    
+    }
+
+    #cancel{
+    display:none;
+    }
+
+    #appointment{
+    display: none;
+    }
+    input{    
+    width:200px;
+    height: 20px;
+    margin: 3px;
+    padding: 3px;
+    }
+
+    .button{
+    height: 30px;
+    width: 70px;
+    font-weight: bold;
+    }
+    
+    label {
+    margin: 2px 3px 3px 1px;
+    display: block;    
+    }
+    
+    textarea{
+    width:200px;
+    height: 50px;
+    padding: 3px;
+    margin: 3px;
+    }
+
+    .input_error{
+    border: 1px solid #f00; 
+    }
