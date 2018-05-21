@@ -153,6 +153,7 @@ a new perspective to look at what we already know.
 the global apache config.
 * Organize jQuery code into modules. However the literal was OK for this case considering the time I had.
 * Create a more elegant database abstraction for DBI and DBD::SQLite using modules.
+* Create a docker image (DockerFile) to make the setup process easier and more portable.
 
 * These resources have been very useful in the process
   * [Zetcode Perl SQLite Tutorial](http://zetcode.com/db/sqliteperltutorial/)
