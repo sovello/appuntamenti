@@ -22,7 +22,7 @@ my $appt = Appointment->new;
 my $dbh = $dbconn->connect($db, $userid, $passwd);
 
 if( $dbh == 0){
-    my $result = qq{{"error" : "We could not connect to the database at this time"}};
+    my $result = qq{{"success" : "We could not connect to the database at this time"}};
 # return JSON string
     print $cgi->header(-type=>"application/json", -charset=>"utf-8");
     print $result;
@@ -56,10 +56,6 @@ my $json->{"appointments"} = \@results;
 my $appointments = encode_json $json;
 
 
-# create a JSON string according to the database result
-#my $result = (1) ? 
-#qq{{"success" : "$desc", "time" : "$time"}} : 
-#qq{{"error" : "did not get anything "}};
 # return JSON string
 print $cgi->header(-type=>"application/json", -charset=>"utf-8");
 print $appointments;
