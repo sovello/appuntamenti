@@ -147,7 +147,15 @@ For the coming days I will keep learning this to become more familiar.
 I become better at languages that I already know. A new language gives us
 a new perspective to look at what we already know.
 
-* These resources have been very useful
+
+## Areas of improvement:
+* Set own configuration for cgi-bin for this site only. This would still require changing AllowOverride in
+the global apache config.
+* Organize jQuery code into modules. However the literal was OK for this case considering the time I had.
+* Create a more elegant database abstraction for DBI and DBD::SQLite using modules.
+* Create a docker image (DockerFile) to make the setup process easier and more portable.
+
+* These resources have been very useful in the process
   * [Zetcode Perl SQLite Tutorial](http://zetcode.com/db/sqliteperltutorial/)
   * [Introductory Perl Tutorial Course for Windows](https://www.gossland.com/perlcourse/default/index)
   * [Gabor Szabo's Perl Tutorial](https://perlmaven.com/perl-tutorial)
