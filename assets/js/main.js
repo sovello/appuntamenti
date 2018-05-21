@@ -43,7 +43,7 @@ var appointment = {
     },
 
     //clear a form field
-    cleafField: function(field_element){
+    clearField: function(field_element){
 	$(field_element).val("");
     },        
 
@@ -54,7 +54,7 @@ var appointment = {
 	    $(element).datepicker({minDate:0});	    
 	}
 	else {
-	    $(element).timepicker({ 'scrollDefault': 'now' });
+	    $(element).timepicker({ 'scrollDefault': 'now', 'timeFormat': 'H:i:s' });
 	}
     },
 
@@ -89,6 +89,7 @@ var appointment = {
 	    success: function(result){
 		if( method != "GET" ){
 		    $("div#message").text("Record has been saved!");
+		    console.log("Record has been saved");
 		    appointment.clearForm();
 		}
 		appointment.echoAppointments(result.appointments);
@@ -108,7 +109,7 @@ var appointment = {
 	    $('#appointment_list').empty();
 	    var trHTML = '';
 	    $.each(data, function (i, appointment) {
-		trHTML += '<tr><td>' + appointment.date + '</td><td>' + appointment.time + '</td><td>' + appointment.description + '</td></tr>';
+		trHTML += '<tr><td>' + appointment.date + '</td><td>' + appointment.time + '</td><td><a href="'+appointment.id+'">' + appointment.description + '</a></td></tr>';
 	    });
 	    $('#appointment_list').append(trHTML);
 	};
@@ -129,7 +130,14 @@ $(document).ready( function(){
     
     appointment.showPicker("#appointment_date", "date");
     appointment.showPicker("#appointment_time", "time");
-
+    $(document).on("click", "a", function(event){
+	event.preventDefault();
+	$("#new")
+	    .text("UPDATE")
+	    .attr("id", "add");
+	$("#cancel").show();
+	$("form#appointment").show();
+    });
     //data submission
     $(document).on("click", "#add", function(){
 	$("div#message").text("");
@@ -138,7 +146,7 @@ $(document).ready( function(){
 	    var appt_time = appointment.getInput($("#appointment_time"));
 	    var description = appointment.getInput($("#description"));
 	    
-	    var appt = {date: appt_date, time: appt_time, description:description}	
+	    var appt = {id: "12", date: appt_date, time: appt_time, description:description}	
 	    appointment.doAjax("POST", appt);
 	}
 	else{
@@ -151,7 +159,8 @@ $(document).ready( function(){
 	var query = appointment.getInput($("#search_query"));
 	if( query.trim().length != 0){
 	    appointment.doAjax("GET", {search_query: query, all:2});
-	}		    	
+	}
+	appointment.doAjax("GET", {search_query: query, all:2});
     });
     appointment.doAjax("GET", {all:1})
 });
