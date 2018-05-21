@@ -10,28 +10,28 @@ It is only tested to work for Ubuntu 16.04
 
 Install JSON and CGI modules.
 
-`
+```
 sudo cpan JSON
 sudo cpan CGI
-`
+```
 
 * CGI is great for handling Common Gateway Interface requests and responses (`POST` and `GET`).
-You can read about its details [here http://search.cpan.org/~lds/CGI.pm-3.43/CGI.pm].
+You can read about its details [here](http://search.cpan.org/~lds/CGI.pm-3.43/CGI.pm).
 
-* JSON for general JSON processing. You can also read about the module [here http://search.cpan.org/~ishigaki/JSON-2.97001/lib/JSON.pm]
+* JSON for general JSON processing. You can also read about the module [here](http://search.cpan.org/~ishigaki/JSON-2.97001/lib/JSON.pm).
 
 
 Then, since this is a database based application, we need to have a database interface. For this, PERL has
-a common interface, DBI whose details can be found [here http://search.cpan.org/~timb/DBI-1.641/DBI.pm]
+a common interface, DBI whose details can be found [here](http://search.cpan.org/~timb/DBI-1.641/DBI.pm).
 For this case, we will also need a SQLite specific driver (DBD::SQLite) which allows PERL to talk to SQLite. If you don't have
 sqlite installed in Ubuntu you can run `sudo apt-get install sqlite3`
 
 To install DBI and DBD::SQLite
 
-`
+```
 sudo cpan DBI
 sudo cpan DBD::SQLite
-`
+```
 
 Enable CGI module
 
